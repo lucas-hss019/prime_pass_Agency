@@ -30,9 +30,6 @@ type Testimonial = {
 
 type SiteSettings = {
   site_name: string | null
-  support_email: string | null
-  support_phone: string | null
-  whatsapp_number: string | null
   hero_title: string | null
   hero_subtitle: string | null
   about_text: string | null
@@ -289,9 +286,7 @@ export default function HomePage() {
             .order('sort_order', { ascending: true }),
           supabase
             .from('site_settings')
-            .select(
-              'site_name, support_email, support_phone, whatsapp_number, hero_title, hero_subtitle, about_text, quote_success_message'
-            )
+            .select('site_name, hero_title, hero_subtitle, about_text, quote_success_message')
             .limit(1)
             .maybeSingle(),
         ])
@@ -464,7 +459,7 @@ export default function HomePage() {
     }
 
     try {
-      await fetch('/api/send-quote-email', {
+      const emailResponse = await fetch('/api/send-quote-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -486,6 +481,10 @@ export default function HomePage() {
           notes: formData.notes,
         }),
       })
+
+      if (!emailResponse.ok) {
+        console.error('Falha ao enviar o e-mail da cotação.')
+      }
     } catch (emailError) {
       console.error(emailError)
     }

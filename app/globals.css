@@ -321,7 +321,6 @@ textarea {
 }
 
 .destinations-grid,
-.features-grid,
 .routes-grid,
 .testimonials-grid {
   display: grid;
@@ -333,7 +332,6 @@ textarea {
 }
 
 .destination-card,
-.feature-card,
 .route-card,
 .form-card {
   border: 1px solid var(--line);
@@ -341,8 +339,7 @@ textarea {
   box-shadow: var(--shadow);
 }
 
-.destination-card,
-.feature-card {
+.destination-card {
   overflow: hidden;
   background: rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(10px);
@@ -380,21 +377,11 @@ textarea {
 }
 
 .destination-content p,
-.feature-card p,
 .route-card p {
   color: var(--muted);
   line-height: 1.7;
 }
 
-.features-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.feature-card {
-  padding: 26px;
-}
-
-.feature-card h3,
 .route-card h3 {
   margin-bottom: 12px;
   font-size: 1.4rem;
@@ -416,8 +403,9 @@ textarea {
 .testimonial-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 12px;
+  margin-bottom: 10px;
 }
 
 .testimonial-card small {
@@ -461,11 +449,6 @@ textarea {
   color: var(--brand-deep);
   font-size: 0.95rem;
   letter-spacing: 0.08em;
-}
-
-.testimonial-head {
-  justify-content: flex-start;
-  margin-bottom: 10px;
 }
 
 .route-card {
@@ -900,7 +883,6 @@ textarea {
   .quote-shell,
   .process-grid,
   .destinations-grid,
-  .features-grid,
   .routes-grid,
   .testimonials-grid,
   .toggle-grid {
@@ -922,7 +904,6 @@ textarea {
   .quote-shell,
   .process-grid,
   .destinations-grid,
-  .features-grid,
   .routes-grid,
   .testimonials-grid,
   .form-row,
@@ -960,8 +941,7 @@ textarea {
 
   .form-card,
   .hero-panel,
-  .route-card,
-  .feature-card {
+  .route-card {
     padding: 22px;
   }
 
