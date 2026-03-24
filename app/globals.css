@@ -169,22 +169,6 @@ textarea {
   box-shadow: var(--shadow);
 }
 
-.hero-brand-card {
-  display: block;
-  margin-bottom: 22px;
-  padding: 10px;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(215, 179, 92, 0.22);
-}
-
-.hero-brand-image {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 20px;
-}
-
 .panel-eyebrow {
   margin-bottom: 10px;
   color: var(--brand-deep);
@@ -836,23 +820,79 @@ textarea {
 }
 
 .footer-shell {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  flex-wrap: wrap;
+  display: grid;
+  gap: 24px;
+  justify-items: center;
+}
+
+.footer-contact {
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  width: min(100%, 860px);
+  padding: 22px 24px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(15, 33, 60, 0.08);
+  box-shadow: 0 18px 36px rgba(7, 27, 56, 0.08);
+}
+
+.footer-title {
+  color: var(--brand-deep);
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+
+.footer-group {
+  display: grid;
+  gap: 10px;
+}
+
+.footer-group-title {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
   gap: 14px;
 }
 
 .footer-links a {
+  display: block;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(15, 33, 60, 0.08);
   color: var(--ink);
   font-weight: 600;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.footer-links a:hover {
+  transform: translateY(-1px);
+  border-color: rgba(183, 136, 36, 0.34);
+  box-shadow: 0 12px 22px rgba(7, 27, 56, 0.08);
+}
+
+.footer-copy {
+  text-align: center;
 }
 
 @media (max-width: 1080px) {
@@ -926,7 +966,14 @@ textarea {
   }
 
   .footer-shell {
-    justify-content: center;
     text-align: center;
+  }
+
+  .footer-contact {
+    width: 100%;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
   }
 }

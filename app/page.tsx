@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 
@@ -71,6 +70,11 @@ type ProcessStep = {
   tag: string
   title: string
   description: string
+}
+
+type FooterContact = {
+  label: string
+  href: string
 }
 
 const destinationImages: Record<string, string> = {
@@ -203,6 +207,25 @@ const processSteps: ProcessStep[] = [
   },
 ]
 
+const footerContacts: FooterContact[] = [
+  {
+    label: 'suporte@primepassagency.com',
+    href: 'mailto:suporte@primepassagency.com',
+  },
+  {
+    label: 'primepassagencytravel@primepassagency.com',
+    href: 'mailto:primepassagencytravel@primepassagency.com',
+  },
+  {
+    label: '+55-19-996200471',
+    href: 'tel:+5519996200471',
+  },
+  {
+    label: '+351-961804838',
+    href: 'tel:+351961804838',
+  },
+]
+
 const initialFormData: QuoteFormData = {
   full_name: '',
   email: '',
@@ -222,10 +245,6 @@ const initialFormData: QuoteFormData = {
 
 function normalizeLocation(value: string) {
   return value.trim().toLowerCase()
-}
-
-function normalizeDigits(value: string | null | undefined) {
-  return (value || '').replace(/\D/g, '')
 }
 
 function getDestinationImage(destination: Destination) {
@@ -444,6 +463,33 @@ export default function HomePage() {
       return
     }
 
+    try {
+      await fetch('/api/send-quote-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          full_name: formData.full_name,
+          email: formData.email,
+          phone: formData.phone,
+          trip_type: formData.trip_type,
+          people_count: Number(formData.people_count),
+          departure_name: matchedDeparture
+            ? `${matchedDeparture.name} - ${matchedDeparture.country}`
+            : formData.departure_location.trim(),
+          destination_name: matchedDestination
+            ? `${matchedDestination.name} - ${matchedDestination.country}`
+            : formData.destination.trim(),
+          departure_date: formData.departure_date,
+          return_date: formData.trip_type === 'round_trip' ? formData.return_date : '',
+          notes: formData.notes,
+        }),
+      })
+    } catch (emailError) {
+      console.error(emailError)
+    }
+
     setMessage(
       siteSettings?.quote_success_message?.trim() ||
         'Pedido enviado com sucesso. A nossa equipa entra em contacto em breve.'
@@ -464,9 +510,8 @@ export default function HomePage() {
 
   const visibleDestinations = destinations.length ? destinations.slice(0, 4) : fallbackDestinations
   const visibleTestimonials = testimonials.length ? testimonials.slice(0, 3) : fallbackTestimonials
-
-  const whatsappNumber = normalizeDigits(siteSettings?.whatsapp_number)
-  const whatsappLink = whatsappNumber ? `https://wa.me/${whatsappNumber}` : null
+  const footerEmails = footerContacts.filter((contact) => contact.href.startsWith('mailto:'))
+  const footerPhones = footerContacts.filter((contact) => contact.href.startsWith('tel:'))
 
   return (
     <>
@@ -488,17 +533,6 @@ export default function HomePage() {
           </div>
 
           <div className="hero-panel">
-            <div className="hero-brand-card">
-              <Image
-                src="/primepass-logo-dark.jpeg"
-                alt={`Logotipo ${siteName}`}
-                width={768}
-                height={768}
-                className="hero-brand-image"
-                priority
-              />
-            </div>
-
             <p className="panel-eyebrow">PrimePass</p>
             <h2>Pedido simples. Atendimento real.</h2>
             <div className="hero-steps">
@@ -888,19 +922,34 @@ export default function HomePage() {
 
       <footer className="footer">
         <div className="container footer-shell">
-          <p>© 2026 {siteName}. Todos os direitos reservados.</p>
+          <div className="footer-contact">
+            <span className="footer-title">Contactos</span>
+            <div className="footer-grid">
+              <div className="footer-group">
+                <span className="footer-group-title">E-mail</span>
+                <div className="footer-links">
+                  {footerEmails.map((contact) => (
+                    <a href={contact.href} key={contact.href}>
+                      {contact.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
 
-          <div className="footer-links">
-            {siteSettings?.support_email ? (
-              <a href={`mailto:${siteSettings.support_email}`}>{siteSettings.support_email}</a>
-            ) : null}
-
-            {siteSettings?.support_phone ? (
-              <a href={`tel:${siteSettings.support_phone}`}>{siteSettings.support_phone}</a>
-            ) : null}
-
-            {whatsappLink ? <a href={whatsappLink}>WhatsApp</a> : null}
+              <div className="footer-group">
+                <span className="footer-group-title">Telefone</span>
+                <div className="footer-links">
+                  {footerPhones.map((contact) => (
+                    <a href={contact.href} key={contact.href}>
+                      {contact.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
+
+          <p className="footer-copy">© 2026 {siteName}. Todos os direitos reservados.</p>
         </div>
       </footer>
     </>
