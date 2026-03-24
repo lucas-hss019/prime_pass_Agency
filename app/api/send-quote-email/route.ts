@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     } = body
 
     const { data, error } = await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'Prime Pass Agency <primepassagencytravel@primepassagency.com>',
       to: ['jorgeneto@primepassagency.com'],
       subject: `Nova cotação recebida - ${full_name}`,
       html: `
