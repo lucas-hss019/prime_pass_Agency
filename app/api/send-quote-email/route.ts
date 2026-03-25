@@ -42,7 +42,7 @@ export async function POST(req: Request) {
     'PrimePass Agency <primepassagencytravel@primepassagency.com>'
   const quoteRecipients = (
     process.env.QUOTE_NOTIFICATION_TO ||
-    'suporte@primepassagency.com,primepassagencytravel@primepassagency.com'
+    'jorgeneto@primepassagency.com,primepassagencytravel@primepassagency.com'
   )
     .split(',')
     .map((item) => item.trim())

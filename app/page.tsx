@@ -244,6 +244,97 @@ function normalizeLocation(value: string) {
   return value.trim().toLowerCase()
 }
 
+function getPhoneDigits(value: string) {
+  return value.replace(/\D/g, '')
+}
+
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(value.trim())
+}
+
+function getQuoteValidationMessage(formData: QuoteFormData) {
+  const fullName = formData.full_name.trim()
+  const email = formData.email.trim()
+  const phoneDigits = getPhoneDigits(formData.phone)
+  const departureLocation = formData.departure_location.trim()
+  const destination = formData.destination.trim()
+
+  if (fullName.length < 3) {
+    return 'Preenche um nome válido.'
+  }
+
+  if (fullName.length > 120) {
+    return 'O nome está demasiado longo.'
+  }
+
+  if (!isValidEmail(email)) {
+    return 'Preenche um e-mail válido.'
+  }
+
+  if (email.length > 120) {
+    return 'O e-mail está demasiado longo.'
+  }
+
+  if (phoneDigits.length < 9) {
+    return 'Preenche um telefone ou WhatsApp válido.'
+  }
+
+  if (formData.phone.trim().length > 30) {
+    return 'O telefone está demasiado longo.'
+  }
+
+  if (!departureLocation) {
+    return 'Indica o local de partida.'
+  }
+
+  if (departureLocation.length > 120) {
+    return 'O local de partida está demasiado longo.'
+  }
+
+  if (!destination) {
+    return 'Indica o destino.'
+  }
+
+  if (destination.length > 120) {
+    return 'O destino está demasiado longo.'
+  }
+
+  if (normalizeLocation(departureLocation) === normalizeLocation(destination)) {
+    return 'Partida e destino não podem ser iguais.'
+  }
+
+  if (!formData.departure_date) {
+    return 'Seleciona a data de ida.'
+  }
+
+  if (formData.trip_type === 'round_trip' && !formData.return_date) {
+    return 'Seleciona a data de volta.'
+  }
+
+  if (
+    formData.trip_type === 'round_trip' &&
+    formData.departure_date &&
+    formData.return_date &&
+    formData.return_date < formData.departure_date
+  ) {
+    return 'A data de volta tem de ser igual ou posterior à data de ida.'
+  }
+
+  if (formData.people_count < 1 || formData.people_count > 12) {
+    return 'Seleciona um número válido de viajantes.'
+  }
+
+  if (formData.accepts_connections && !formData.max_connections) {
+    return 'Escolhe o máximo de conexões.'
+  }
+
+  if (formData.notes.trim().length > 1000) {
+    return 'As observações estão demasiado longas.'
+  }
+
+  return ''
+}
+
 function getDestinationImage(destination: Destination) {
   return (
     destination.image_url ||
@@ -402,6 +493,15 @@ export default function HomePage() {
     setMessage('')
     setMessageType('')
 
+    const validationMessage = getQuoteValidationMessage(formData)
+
+    if (validationMessage) {
+      setMessage(validationMessage)
+      setMessageType('error')
+      setLoading(false)
+      return
+    }
+
     const matchedDeparture = departureLocations.find((location) => {
       const locationLabel = normalizeLocation(
         `${location.name} ${location.country} ${location.airport_code || ''}`
@@ -511,6 +611,17 @@ export default function HomePage() {
   const visibleTestimonials = testimonials.length ? testimonials.slice(0, 3) : fallbackTestimonials
   const footerEmails = footerContacts.filter((contact) => contact.href.startsWith('mailto:'))
   const footerPhones = footerContacts.filter((contact) => contact.href.startsWith('tel:'))
+  const formValidationMessage = getQuoteValidationMessage(formData)
+  const hasStartedForm = [
+    formData.full_name,
+    formData.email,
+    formData.phone,
+    formData.departure_location,
+    formData.destination,
+    formData.departure_date,
+    formData.return_date,
+  ].some((value) => value.trim() !== '')
+  const canSubmit = !loading && !formValidationMessage
 
   return (
     <>
@@ -716,6 +827,9 @@ export default function HomePage() {
                       placeholder="Nome para contacto"
                       value={formData.full_name}
                       onChange={handleChange}
+                      autoComplete="name"
+                      minLength={3}
+                      maxLength={120}
                       required
                     />
                   </label>
@@ -728,6 +842,8 @@ export default function HomePage() {
                       placeholder="nome@exemplo.com"
                       value={formData.email}
                       onChange={handleChange}
+                      autoComplete="email"
+                      maxLength={120}
                       required
                     />
                   </label>
@@ -905,9 +1021,13 @@ export default function HomePage() {
                 </label>
               </div>
 
-              <button type="submit" disabled={loading} className="submit-btn">
+              <button type="submit" disabled={!canSubmit} className="submit-btn">
                 {loading ? 'A enviar...' : 'Enviar pedido'}
               </button>
+
+              {!loading && hasStartedForm && formValidationMessage ? (
+                <p className="message-hint">{formValidationMessage}</p>
+              ) : null}
 
               {message && (
                 <p className={messageType === 'success' ? 'message-success' : 'message-error'}>

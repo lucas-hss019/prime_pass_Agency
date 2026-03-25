@@ -785,8 +785,13 @@ textarea {
 }
 
 .message-success,
+.message-hint,
 .message-error {
   font-weight: 700;
+}
+
+.message-hint {
+  color: var(--muted);
 }
 
 .message-success {
