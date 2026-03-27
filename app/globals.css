@@ -24,7 +24,8 @@ html {
 
 body {
   min-height: 100vh;
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family:
+    'Segoe UI', Arial, Helvetica, sans-serif;
   background:
     radial-gradient(circle at top, rgba(215, 179, 92, 0.18), transparent 28%),
     linear-gradient(180deg, #fbf8f1 0%, #f4efe3 58%, #eee4d0 100%);
