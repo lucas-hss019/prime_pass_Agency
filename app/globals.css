@@ -962,3 +962,196 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
+
+/* Responsive polish */
+
+.hero-text h1 {
+  text-wrap: balance;
+}
+
+.hero-panel {
+  justify-self: end;
+  width: min(100%, 430px);
+}
+
+.process-card,
+.destination-card,
+.route-card {
+  height: 100%;
+}
+
+.route-card {
+  display: grid;
+  align-content: start;
+}
+
+.route-preview strong {
+  overflow-wrap: anywhere;
+}
+
+.quote-form input,
+.quote-form select,
+.quote-form textarea {
+  font-size: 16px;
+}
+
+.footer-group {
+  min-width: 0;
+}
+
+.footer-links a {
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+@media (max-width: 1080px) {
+  .hero-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-text {
+    padding-right: 0;
+  }
+
+  .hero-panel {
+    justify-self: start;
+    width: min(100%, 560px);
+  }
+
+  .quote-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .quote-intro {
+    max-width: 680px;
+  }
+}
+
+@media (max-width: 900px) {
+  .process-grid,
+  .destinations-grid,
+  .routes-grid,
+  .testimonials-grid,
+  .toggle-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section {
+    padding: 72px 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .container {
+    width: min(100%, calc(100% - 24px));
+  }
+
+  .hero,
+  .section {
+    padding: 60px 0;
+  }
+
+  .hero-text h1 {
+    font-size: clamp(2.45rem, 11vw, 3.4rem);
+    line-height: 0.96;
+  }
+
+  .quote-point {
+    gap: 8px;
+  }
+
+  .form-card,
+  .hero-panel,
+  .route-card,
+  .testimonial-card,
+  .process-card {
+    padding: 22px;
+  }
+
+  .testimonial-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .process-card h3 {
+    max-width: none;
+    font-size: 1.7rem;
+  }
+
+  .process-card p,
+  .section-subtitle,
+  .quote-intro p {
+    max-width: none;
+  }
+
+  .quote-intro h2,
+  .form-card-top h3 {
+    font-size: clamp(1.9rem, 8vw, 2.4rem);
+  }
+
+  .destination-image {
+    height: 210px;
+  }
+
+  .badge {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .toggle-head {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero {
+    padding: 52px 0 58px;
+  }
+
+  .section {
+    padding: 56px 0;
+  }
+
+  .hero-panel,
+  .form-card,
+  .route-card,
+  .testimonial-card,
+  .process-card,
+  .footer-contact {
+    border-radius: 22px;
+  }
+
+  .hero-panel h2 {
+    font-size: 1.6rem;
+  }
+
+  .hero-steps div,
+  .quote-point,
+  .form-section {
+    padding: 16px;
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 9vw, 2.2rem);
+  }
+
+  .section-subtitle {
+    margin-bottom: 28px;
+    font-size: 0.98rem;
+  }
+
+  .form-benefits {
+    gap: 8px;
+  }
+
+  .form-benefits span,
+  .form-pill,
+  .testimonial-source {
+    font-size: 0.8rem;
+  }
+
+  .footer-links a {
+    padding: 13px 14px;
+    font-size: 0.96rem;
+  }
+}
